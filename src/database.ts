@@ -10,6 +10,8 @@ const database =
     ? process.env.POSTGRES_DB_NAME_TEST
     : process.env.POSTGRES_DB_NAME_DEV;
 
+console.log(`${database} connected`);
+
 const client = new Pool({
   host: process.env.POSTGRES_HOST,
   database,
