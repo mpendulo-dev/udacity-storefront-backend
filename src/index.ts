@@ -1,6 +1,7 @@
 import express from "express";
 import userRoutes from "./handlers/users";
 import productRoutes from "./handlers/products";
+import orderRoutes from "./handlers/orders";
 const port = process.env.PORT;
 const app = express();
 
@@ -12,6 +13,7 @@ app.get("/", (req, res) => {
 
 userRoutes(app);
 productRoutes(app);
+orderRoutes(app);
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);

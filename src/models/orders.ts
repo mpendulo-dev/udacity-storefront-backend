@@ -62,7 +62,7 @@ export class OrderStore {
       RETURNING *;
     `;
 
-      const result = await conn.query(sql, [order.status, order.user_id, id]);
+      const result = await conn.query(sql, [order.status, id]);
 
       conn.release();
 
