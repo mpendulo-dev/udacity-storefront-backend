@@ -55,7 +55,7 @@ export class ProductStore {
       const conn = await Client.connect();
 
       const sql = `
-      UPDATE users 
+      UPDATE products 
       SET name = COALESCE($1, name),
           price = COALESCE($2, price)
       WHERE id = $3

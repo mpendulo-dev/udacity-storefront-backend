@@ -29,6 +29,7 @@ const create = async (req: Request, res: Response) => {
     const newProduct = await productStore.create(product);
     res.json(newProduct);
   } catch (err) {
+    console.log("Error", err);
     res.status(400);
     res.json(err);
   }
@@ -114,7 +115,7 @@ const deleteProduct = async (req: any, res: Response) => {
 const productRoutes = (app: express.Application) => {
   app.get("/products", index);
   app.get("/products/:id", show);
-  app.post("/products", create);
+  app.post("/product", create);
   app.put("/products/:id", update);
   app.delete("/products/:id", deleteProduct);
 };
