@@ -10,7 +10,7 @@
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "target": "ES2017",
-    "types": [],
+    "types": ["jasmine"],
     "esModuleInterop": true,
     // For nodejs:
     // "lib": ["esnext"],
