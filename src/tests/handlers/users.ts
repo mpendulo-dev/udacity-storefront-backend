@@ -3,9 +3,8 @@ import express from "express";
 import jwt from "jsonwebtoken";
 import userRoutes from "../../handlers/users";
 import { UserStore } from "../../models/users";
+import app from "../../index";
 
-const app = express();
-app.use(express.json());
 userRoutes(app);
 
 const request = supertest(app);

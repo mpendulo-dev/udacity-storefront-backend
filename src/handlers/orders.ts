@@ -198,6 +198,30 @@ const deleteOrder = async (req: any, res: Response) => {
 };
 
 const addProduct = async (req: Request, res: Response) => {
+  try {
+    const authorizationHeader = req.headers.authorization;
+
+    if (!authorizationHeader) {
+      throw new Error("Authorization header missing");
+    }
+
+    const token = authorizationHeader.split(" ")[1];
+
+    if (!token) {
+      throw new Error("Token missing");
+    }
+
+    const tokenSecret = process.env.TOKEN_SECRET as string;
+
+    const decoded = jwt.verify(token, tokenSecret);
+
+    console.log(decoded);
+  } catch (err) {
+    res.status(401);
+    res.json("Access denied, invalid token");
+    return;
+  }
+
   const { id } = req.params;
   if (!id || Array.isArray(id)) {
     return res.status(400).send("Invalid ID");

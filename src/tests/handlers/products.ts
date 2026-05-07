@@ -3,9 +3,8 @@ import express from "express";
 import productRoutes from "../../handlers/products";
 import userRoutes from "../../handlers/users";
 import { ProductStore } from "../../models/products";
+import app from "../../index";
 
-const app = express();
-app.use(express.json());
 productRoutes(app);
 userRoutes(app);
 

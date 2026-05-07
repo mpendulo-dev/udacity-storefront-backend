@@ -6,9 +6,8 @@ import userRoutes from "../../handlers/users";
 import { OrderStore } from "../../models/orders";
 import { UserStore } from "../../models/users";
 import { ProductStore } from "../../models/products";
+import app from "../../index";
 
-const app = express();
-app.use(express.json());
 orderRoutes(app);
 userRoutes(app);
 
