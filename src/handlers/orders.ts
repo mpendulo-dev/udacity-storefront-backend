@@ -6,18 +6,75 @@ import { Order } from "../types/orders";
 const orderStore = new OrderStore();
 
 const index = async (req: Request, res: Response) => {
-  const orders = await orderStore.index();
-  res.json(orders);
+  try {
+    const authorizationHeader = req.headers.authorization;
+
+    if (!authorizationHeader) {
+      throw new Error("Authorization header missing");
+    }
+
+    const token = authorizationHeader.split(" ")[1];
+
+    if (!token) {
+      throw new Error("Token missing");
+    }
+
+    const tokenSecret = process.env.TOKEN_SECRET as string;
+
+    const decoded = jwt.verify(token, tokenSecret);
+
+    console.log(decoded);
+  } catch (err) {
+    res.status(401);
+    res.json("Access denied, invalid token");
+    return;
+  }
+  try {
+    const orders = await orderStore.index();
+    res.json(orders);
+  } catch (err) {
+    res.status(400);
+    res.json(err);
+  }
 };
 
 const show = async (req: any, res: Response) => {
+  try {
+    const authorizationHeader = req.headers.authorization;
+
+    if (!authorizationHeader) {
+      throw new Error("Authorization header missing");
+    }
+
+    const token = authorizationHeader.split(" ")[1];
+
+    if (!token) {
+      throw new Error("Token missing");
+    }
+
+    const tokenSecret = process.env.TOKEN_SECRET as string;
+
+    const decoded = jwt.verify(token, tokenSecret);
+
+    console.log(decoded);
+  } catch (err) {
+    res.status(401);
+    res.json("Access denied, invalid token");
+    return;
+  }
+
   const id = req.params.id;
 
-  if (!id) {
-    return res.status(400).send("Missing id parameter");
+  try {
+    if (!id) {
+      return res.status(400).send("Missing id parameter");
+    }
+    const _order = await orderStore.show(id);
+    res.json(_order);
+  } catch (err) {
+    res.status(400);
+    res.json(err);
   }
-  const _order = await orderStore.show(id);
-  res.json(_order);
 };
 
 const create = async (req: Request, res: Response) => {
@@ -128,11 +185,16 @@ const deleteOrder = async (req: any, res: Response) => {
 
   const id = req.params.id;
 
-  if (!id) {
-    return res.status(400).send("Missing id parameter");
+  try {
+    if (!id) {
+      return res.status(400).send("Missing id parameter");
+    }
+    await orderStore.delete(id);
+    res.send(`Order with id ${id} deleted`);
+  } catch (err) {
+    res.status(400);
+    res.json(err);
   }
-  await orderStore.delete(id);
-  res.send(`Order with id ${id} deleted`);
 };
 
 const addProduct = async (req: Request, res: Response) => {

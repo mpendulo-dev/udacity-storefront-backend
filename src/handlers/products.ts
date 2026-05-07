@@ -6,18 +6,28 @@ import jwt from "jsonwebtoken";
 const productStore = new ProductStore();
 
 const index = async (_req: Request, res: Response) => {
-  const products = await productStore.index();
-  res.json(products);
+  try {
+    const products = await productStore.index();
+    res.json(products);
+  } catch (err) {
+    res.status(400);
+    res.json(err);
+  }
 };
 
 const show = async (req: any, res: Response) => {
   const id = req.params.id;
 
-  if (!id) {
-    return res.status(400).send("Missing id parameter");
+  try {
+    if (!id) {
+      return res.status(400).send("Missing id parameter");
+    }
+    const product = await productStore.show(id);
+    res.json(product);
+  } catch (err) {
+    res.status(400);
+    res.json(err);
   }
-  const product = await productStore.show(id);
-  res.json(product);
 };
 const create = async (req: Request, res: Response) => {
   try {
@@ -127,12 +137,16 @@ const deleteProduct = async (req: any, res: Response) => {
   }
 
   const id = req.params.id;
-
-  if (!id) {
-    return res.status(400).send("Missing id parameter");
+  try {
+    if (!id) {
+      return res.status(400).send("Missing id parameter");
+    }
+    await productStore.delete(id);
+    res.send(`Product with id ${id} deleted`);
+  } catch (err) {
+    res.status(400);
+    res.json(err);
   }
-  await productStore.delete(id);
-  res.send(`Product with id ${id} deleted`);
 };
 
 const productRoutes = (app: express.Application) => {

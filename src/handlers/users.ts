@@ -6,18 +6,28 @@ import { User } from "../types/users";
 const userStore = new UserStore();
 
 const index = async (req: Request, res: Response) => {
-  const users = await userStore.index();
-  res.json(users);
+  try {
+    const users = await userStore.index();
+    res.json(users);
+  } catch (err) {
+    res.status(400);
+    res.json(err);
+  }
 };
 
 const show = async (req: any, res: Response) => {
   const id = req.params.id;
 
-  if (!id) {
-    return res.status(400).send("Missing id parameter");
+  try {
+    if (!id) {
+      return res.status(400).send("Missing id parameter");
+    }
+    const user = await userStore.show(id);
+    res.json(user);
+  } catch (err) {
+    res.status(400);
+    res.json(err);
   }
-  const user = await userStore.show(id);
-  res.json(user);
 };
 
 const create = async (req: Request, res: Response) => {
@@ -132,14 +142,19 @@ const deleteUser = async (req: any, res: Response) => {
     res.json("Access denied, invalid token");
     return;
   }
-
   const id = req.params.id;
 
-  if (!id) {
-    return res.status(400).send("Missing id parameter");
+  try {
+    if (!id) {
+      return res.status(400).send("Missing id parameter");
+    }
+
+    await userStore.delete(id);
+    res.send(`User with id ${id} deleted`);
+  } catch (err) {
+    res.status(400);
+    res.json(err);
   }
-  await userStore.delete(id);
-  res.send(`User with id ${id} deleted`);
 };
 
 const userRoutes = (app: express.Application) => {

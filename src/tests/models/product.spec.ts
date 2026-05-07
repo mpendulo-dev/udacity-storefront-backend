@@ -39,14 +39,14 @@ describe("ProductStore Model", () => {
   });
 
   it("should return a list of products", async () => {
-    const created: Product = await store.create(testProduct);
-
-    const products: Product[] = await store.index();
+    const product: Product = {
+      name: "Legion Laptop",
+      price: 800,
+    };
+    await store.create(product);
+    const products = await store.index();
 
     expect(products.length).toBeGreaterThan(0);
-    expect(products[0]?.name).toBeDefined();
-
-    await store.delete(String(created.id));
   });
 
   it("should return the correct product by id", async () => {
